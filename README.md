@@ -142,3 +142,5 @@ Design-System „VIA Events Standard"): `lib/theme.dart` trägt die Tokens (Hell
 (`assets/fonts`, SIL OFL), Fließtext in der Systemschrift (Calibri Light ist nicht frei verteilbar). Die
 Kopfkachel ist das offizielle `baum-negativ.png` aus dem Design-System (`assets/images/logo-tile.png`).
 Bewusste Abweichung wie im Design vermerkt: Statusfarben als Vollfläche im Ergebnis, weil am Einlass ein Blick genügen muss.
+
+Repository: https://github.com/VIA-Events/via-tickets-scan (privat, Hauptzweig `main`, seit 01.10.2026). Push aus dem Ordner `app/` des Monorepos; der Ordner ist ein eigenständiges Git-Repository ohne den restlichen Monorepo-Inhalt.
