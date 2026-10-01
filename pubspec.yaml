@@ -1,0 +1,69 @@
+name: via_tickets_scan
+description: "VIA Tickets Scan – Einlass-Scanner (offline-first) für das VIA-Tickets-System."
+publish_to: "none"
+version: 1.0.0+3
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Kamera/QR
+  mobile_scanner: ^5.1.1
+  # HTTP
+  dio: ^5.4.0
+  # State
+  flutter_riverpod: ^2.5.1
+  # Lokale DB (offline-first Manifest + Scan-Queue).
+  # Konzept nennt drift; sqflite gewählt, damit kein Build-Runner/Codegen nötig ist.
+  sqflite: ^2.3.2
+  path: ^1.9.0
+  # Gerätetoken + Event-Secret (iOS Keychain / Android EncryptedSharedPreferences)
+  flutter_secure_storage: ^9.0.0
+  # HMAC-SHA256 für Offline-QR-Prüfung
+  crypto: ^3.0.3
+  # Client-Scan-UUIDs (Idempotenz)
+  uuid: ^4.3.3
+  intl: ^0.19.0
+  # Hub-Modus: Pairing-QR anzeigen, Display wach halten
+  qr_flutter: ^4.1.0
+  wakelock_plus: ^1.2.10
+  # Scan-Töne (assets/sounds)
+  audioplayers: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+  # Hub-Tests mit echter SQLite auf dem Entwicklungsrechner
+  sqflite_common_ffi: ^2.3.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/sounds/
+    - assets/images/
+  # Alegreya Sans (SIL OFL, assets/fonts/OFL-AlegreyaSans.txt) – Überschriften, Ersatz für die VIA-Hausschrift Flux.
+  fonts:
+    - family: AlegreyaSans
+      fonts:
+        - asset: assets/fonts/AlegreyaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/AlegreyaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/AlegreyaSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/AlegreyaSans-ExtraBold.ttf
+          weight: 800
+
+# App-Icons für iOS/Android aus assets/icon/ erzeugen: `dart run flutter_launcher_icons`
+# (Baum-Logo auf Weiß; Android adaptive mit transparentem Vordergrund). Paket nur zur Build-Zeit.
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon/icon-foreground.png"
