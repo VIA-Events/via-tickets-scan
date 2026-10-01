@@ -2,7 +2,7 @@
 # Codemagic baut iOS auf macOS-Runnern in der Cloud – es braucht keinen eigenen Mac.
 #
 # Einmalig in Codemagic (codemagic.io) einrichten:
-#   1. Repository verbinden (GitHub/GitLab/Bitbucket oder beliebige Git-URL), Arbeitsverzeichnis `app/`.
+#   1. Repository github.com/VIA-Events/via-tickets-scan verbinden (dieser Ordner ist die Repository-Wurzel).
 #   2. Teams → Integrations → App Store Connect: API-Key aus App Store Connect (Users and Access → Integrations → App Store Connect API,
 #      Rolle "App Manager") hochladen; Name hier: `via_appstore`.
 #   3. Code Signing: "Automatic" mit dieser Integration – Codemagic erzeugt Zertifikat + Provisioning Profile selbst.
@@ -26,7 +26,6 @@ workflows:
         bundle_identifier: de.via.tickets.scan
       vars:
         APP_STORE_APPLE_ID: "0000000000" # Apple-ID der App aus App Store Connect (App-Informationen → Allgemein) eintragen.
-    working_directory: app
     scripts:
       - name: Flutter-Pakete
         script: flutter pub get
@@ -71,10 +70,11 @@ workflows:
     environment:
       flutter: stable
       java: 17
-      # Keystore in Codemagic unter Code Signing → Android hochladen (Referenz `via_android_keystore`).
-      android_signing:
-        - via_android_keystore
-    working_directory: app
+      # Signatur: ohne hinterlegten Keystore signiert Flutter die APK mit dem Debug-Schlüssel – reicht zum Testen und
+      # für die direkte Verteilung. Für den Play Store später unter Code Signing → Android einen Keystore hochladen
+      # und hier eintragen:
+      # android_signing:
+      #   - via_android_keystore
     scripts:
       - name: Flutter-Pakete
         script: flutter pub get
