@@ -6,7 +6,7 @@
 #      Name „Codemagic", Rolle „App Manager", erzeugen, .p8 einmalig herunterladen, Issuer-ID + Key-ID notieren.
 #      Vorher müssen die aktuellen Apple-Vereinbarungen akzeptiert sein (Developer Program License Agreement,
 #      App-Store-Connect-Nutzungsbedingungen), sonst liefert die API nur 403.
-#   2. Codemagic → Settings → Integrations → Developer Portal → Connect: Name `via_appstore`, Issuer-ID, Key-ID, .p8.
+#   2. Codemagic → Settings → Integrations → Developer Portal → Connect: Name `Codemagic`, Issuer-ID, Key-ID, .p8.
 #   3. Codemagic → Settings → Code signing identities: iOS certificates → „Generate certificate" (Apple Distribution),
 #      iOS provisioning profiles → „Fetch from Developer Portal" (Bundle `de.via.tickets.scan`, Typ App Store).
 #      `ios_signing` unten holt dann genau diese Dateien; ohne sie bricht der Build mit „No matching profiles found" ab.
@@ -21,7 +21,7 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m2
     integrations:
-      app_store_connect: via_appstore
+      app_store_connect: Codemagic # Name des API-Schlüssels unter Settings → Integrations → Developer Portal
     environment:
       flutter: stable
       xcode: latest
@@ -30,7 +30,7 @@ workflows:
         distribution_type: app_store
         bundle_identifier: de.via.tickets.scan
       vars:
-        APP_STORE_APPLE_ID: "0000000000" # Apple-ID der App aus App Store Connect (App-Informationen → Allgemein) eintragen.
+        APP_STORE_APPLE_ID: "6824601249" # Apple-ID der App „VIA Tickets Scan" in App Store Connect
     scripts:
       - name: Flutter-Pakete
         script: flutter pub get
@@ -57,9 +57,9 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
-        beta_groups:
-          - VIA Einlass
+        # Upload nach App Store Connect; der Build erscheint danach in TestFlight für interne Tester (Teammitglieder).
+        # Externe Tester (Gruppe „VIA Einlass") erst nach Beta-Review: dann submit_to_testflight: true + beta_groups.
+        submit_to_testflight: false
         submit_to_app_store: false # nach erfolgreichem TestFlight-Test auf true setzen
       email:
         recipients:

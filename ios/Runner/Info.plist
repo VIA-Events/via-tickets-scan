@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Via Tickets Scan</string>
+	<string>VIA Tickets Scan</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -74,7 +74,7 @@
 	<array>
 		<string>_viatickets._tcp</string>
 	</array>
-	<key>CFBundleDisplayName</key>
-	<string>VIA Tickets Scan</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
