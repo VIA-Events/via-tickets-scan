@@ -1,12 +1,17 @@
 # Codemagic-Build für VIA Tickets Scan (iOS → TestFlight/App Store, Android → APK/AAB).
 # Codemagic baut iOS auf macOS-Runnern in der Cloud – es braucht keinen eigenen Mac.
 #
-# Einmalig in Codemagic (codemagic.io) einrichten:
-#   1. Repository github.com/VIA-Events/via-tickets-scan verbinden (dieser Ordner ist die Repository-Wurzel).
-#   2. Teams → Integrations → App Store Connect: API-Key aus App Store Connect (Users and Access → Integrations → App Store Connect API,
-#      Rolle "App Manager") hochladen; Name hier: `via_appstore`.
-#   3. Code Signing: "Automatic" mit dieser Integration – Codemagic erzeugt Zertifikat + Provisioning Profile selbst.
-#   4. In App Store Connect die App "VIA Tickets Scan" mit Bundle-ID `de.via.tickets.scan` anlegen (Apple Developer → Identifiers vorher registrieren).
+# Einmalig einrichten (Stand 19.10.2026, Codemagic „Personal Account" = eigenes Team):
+#   1. App Store Connect → Benutzer und Zugriff → Integrationen → App Store Connect API → Team-Schlüssel „+":
+#      Name „Codemagic", Rolle „App Manager", erzeugen, .p8 einmalig herunterladen, Issuer-ID + Key-ID notieren.
+#      Vorher müssen die aktuellen Apple-Vereinbarungen akzeptiert sein (Developer Program License Agreement,
+#      App-Store-Connect-Nutzungsbedingungen), sonst liefert die API nur 403.
+#   2. Codemagic → Settings → Integrations → Developer Portal → Connect: Name `via_appstore`, Issuer-ID, Key-ID, .p8.
+#   3. Codemagic → Settings → Code signing identities: iOS certificates → „Generate certificate" (Apple Distribution),
+#      iOS provisioning profiles → „Fetch from Developer Portal" (Bundle `de.via.tickets.scan`, Typ App Store).
+#      `ios_signing` unten holt dann genau diese Dateien; ohne sie bricht der Build mit „No matching profiles found" ab.
+#   4. In App Store Connect die App „VIA Tickets Scan" mit Bundle-ID `de.via.tickets.scan` anlegen
+#      (App-ID ist im Developer-Portal registriert).
 #
 # Die Plattform-Ordner android/ und ios/ müssen im Repo liegen (einmalig `flutter create .` – siehe README.md).
 
@@ -66,7 +71,7 @@ workflows:
   android-release:
     name: Android – APK und App Bundle
     max_build_duration: 45
-    instance_type: linux_x2
+    instance_type: mac_mini_m2 # linux_x2 ist im Gratis-Plan nicht verfügbar
     environment:
       flutter: stable
       java: 17
